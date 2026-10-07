@@ -79,9 +79,7 @@ export default function Index() {
 
         <Pressable
           style={styles.addButton}
-          onPress={() =>
-            Alert.alert("Bukuku", "Fitur tambah buku diaktifkan di Modul 2.")
-          }
+          onPress={() => Alert.alert("Bukuku", "fitur belum tersedia")}
         >
           <Ionicons name="add-circle" size={22} color="#ffffff" />
           <Text style={styles.addButtonText}>Tambah Buku</Text>
