@@ -1,98 +1,98 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from "@expo/vector-icons";
+import {
+  Alert,
+  Button,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { styles } from "@/constants/styles";
+import { books } from "@/data/books";
+import { Book, BookStatus } from "@/types/book";
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
+// Function biasa + kondisi (switch): menentukan warna badge sesuai status
+function getStatusColor(status?: BookStatus): string {
+  switch (status) {
+    case "Selesai":
+      return "#16a34a";
+    case "Sedang dibaca":
+      return "#2563eb";
+    case "Ingin dibaca":
+      return "#d97706";
+    default:
+      return "#64748b";
   }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
 }
 
-export default function HomeScreen() {
+// Custom function: membuat satu kartu buku dari satu data Book
+const renderBookCard = (book: Book) => (
+  <View key={book.id} style={styles.card}>
+    <Image source={{ uri: book.cover }} style={styles.cover} />
+
+    <View style={styles.cardInfo}>
+      <Text style={styles.bookTitle}>{book.title}</Text>
+      <Text style={styles.bookAuthor}>{book.author}</Text>
+
+      {/* Inline style: warna badge bergantung pada nilai status (dinamis) */}
+      <View
+        style={[styles.badge, { backgroundColor: getStatusColor(book.status) }]}
+      >
+        <Text style={styles.badgeText}>
+          {book.status ?? "Belum ada status"}
+        </Text>
+      </View>
+    </View>
+  </View>
+);
+
+export default function Index() {
+  const appName = "Bukuku";
+  const totalBooks = books.length;
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Ionicons name="book" size={36} color="#2563eb" />
+        <View>
+          <Text style={styles.appTitle}>{appName}</Text>
+          <Text style={styles.appSubtitle}>
+            {totalBooks} buku dalam daftar bacaanmu
+          </Text>
+        </View>
+      </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      {/* Daftar buku: loop dengan map() */}
+      <Text style={styles.sectionTitle}>Daftar Buku</Text>
+      {books.map(renderBookCard)}
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      {/* Form tambah buku (masih statis, diaktifkan di Modul 2) */}
+      <Text style={styles.sectionTitle}>Tambah Buku</Text>
+      <View style={styles.formCard}>
+        <TextInput placeholder="Judul buku" style={styles.input} />
+        <TextInput placeholder="Penulis" style={styles.input} />
+        <TextInput placeholder="URL cover (opsional)" style={styles.input} />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <Pressable
+          style={styles.addButton}
+          onPress={() =>
+            Alert.alert("Bukuku", "Fitur tambah buku diaktifkan di Modul 2.")
+          }
+        >
+          <Ionicons name="add-circle" size={22} color="#ffffff" />
+          <Text style={styles.addButtonText}>Tambah Buku</Text>
+        </Pressable>
+
+        <Button
+          title="Batal"
+          color="#64748b"
+          onPress={() => Alert.alert("Bukuku", "Form dibatalkan.")}
+        />
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});

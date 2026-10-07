@@ -1,0 +1,108 @@
+import { StyleSheet } from "react-native";
+
+// External styling: semua aturan style dipisah dari file komponen
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f1f5f9",
+  },
+  content: {
+    padding: 20,
+    paddingTop: 56,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  appTitle: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#0f172a",
+    marginLeft: 12,
+  },
+  appSubtitle: {
+    fontSize: 14,
+    color: "#64748b",
+    marginLeft: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#0f172a",
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  card: {
+    flexDirection: "row",
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    padding: 12,
+    marginBottom: 12,
+    elevation: 3,
+    shadowColor: "#000",
+  },
+  cover: {
+    width: 70,
+    height: 100,
+    borderRadius: 8,
+    backgroundColor: "#e2e8f0",
+  },
+  cardInfo: {
+    flex: 1,
+    marginLeft: 12,
+    justifyContent: "center",
+  },
+  bookTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#0f172a",
+  },
+  bookAuthor: {
+    fontSize: 14,
+    color: "#64748b",
+    marginBottom: 8,
+  },
+  badge: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  badgeText: {
+    fontSize: 12,
+    color: "#ffffff",
+    fontWeight: "bold",
+  },
+  formCard: {
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 24,
+    elevation: 3,
+    shadowColor: "#000",
+  },
+  input: {
+    borderWidth: 2,
+    borderColor: "#2563eb",
+    backgroundColor: "#ffffff",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  addButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#2563eb",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  addButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 8,
+  },
+});
