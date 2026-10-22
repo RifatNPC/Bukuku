@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { useMemo, useState } from "react";
 import {
-  Alert,
-  Button,
   Image,
   Pressable,
   ScrollView,
@@ -11,26 +11,13 @@ import {
 } from "react-native";
 
 import { styles } from "@/constants/styles";
-import { books } from "@/data/books";
-import { Book, BookStatus } from "@/types/book";
+import { useBooks } from "@/context/BooksContext";
+import { Book } from "@/types/book";
+import { getStatusColor } from "@/utils/status";
 
-// Function biasa + kondisi (switch): menentukan warna badge sesuai status
-function getStatusColor(status?: BookStatus): string {
-  switch (status) {
-    case "Selesai":
-      return "#16a34a";
-    case "Sedang dibaca":
-      return "#2563eb";
-    case "Ingin dibaca":
-      return "#d97706";
-    default:
-      return "#64748b";
-  }
-}
-
-// Custom function: membuat satu kartu buku dari satu data Book
-const renderBookCard = (book: Book) => (
-  <View key={book.id} style={styles.card}>
+// Custom function: membuat satu kartu buku, kartu bisa ditekan (onPress)
+const renderBookCard = (book: Book, onPress: () => void) => (
+  <Pressable key={book.id} style={styles.card} onPress={onPress}>
     <Image source={{ uri: book.cover }} style={styles.cover} />
 
     <View style={styles.cardInfo}>
@@ -46,12 +33,28 @@ const renderBookCard = (book: Book) => (
         </Text>
       </View>
     </View>
-  </View>
+  </Pressable>
 );
 
 export default function Index() {
+  const router = useRouter();
+  const { books } = useBooks();
+
   const appName = "Bukuku";
   const totalBooks = books.length;
+
+  // useState: teks pencarian, UI ikut berubah setiap kali diketik
+  const [query, setQuery] = useState("");
+
+  // useMemo: hasil filter hanya dihitung ulang jika books atau query berubah
+  const filteredBooks = useMemo(() => {
+    const keyword = query.trim().toLowerCase();
+    return books.filter(
+      (book) =>
+        book.title.toLowerCase().includes(keyword) ||
+        book.author.toLowerCase().includes(keyword),
+    );
+  }, [books, query]);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -66,31 +69,31 @@ export default function Index() {
         </View>
       </View>
 
+      {/* router.push: pindah ke halaman Tambah Buku (ditumpuk di atas Beranda) */}
+      <Pressable style={styles.addButton} onPress={() => router.push("/add")}>
+        <Ionicons name="add-circle" size={22} color="#ffffff" />
+        <Text style={styles.addButtonText}>Tambah Buku</Text>
+      </Pressable>
+
+      <TextInput
+        placeholder="Cari judul atau penulis"
+        style={styles.input}
+        value={query}
+        onChangeText={setQuery}
+      />
+
       {/* Daftar buku: loop dengan map() */}
       <Text style={styles.sectionTitle}>Daftar Buku</Text>
-      {books.map(renderBookCard)}
-
-      {/* Form tambah buku (masih statis, diaktifkan di Modul 2) */}
-      <Text style={styles.sectionTitle}>Tambah Buku</Text>
-      <View style={styles.formCard}>
-        <TextInput placeholder="Judul buku" style={styles.input} />
-        <TextInput placeholder="Penulis" style={styles.input} />
-        <TextInput placeholder="URL cover (opsional)" style={styles.input} />
-
-        <Pressable
-          style={styles.addButton}
-          onPress={() => Alert.alert("Bukuku", "fitur belum tersedia")}
-        >
-          <Ionicons name="add-circle" size={22} color="#ffffff" />
-          <Text style={styles.addButtonText}>Tambah Buku</Text>
-        </Pressable>
-
-        <Button
-          title="Batal"
-          color="#64748b"
-          onPress={() => Alert.alert("Bukuku", "Form dibatalkan.")}
-        />
-      </View>
+      {filteredBooks.length === 0 ? (
+        <Text style={styles.emptyText}>Tidak ada buku yang cocok.</Text>
+      ) : (
+        filteredBooks.map((book) =>
+          renderBookCard(book, () =>
+            // router.push dengan params: kirim id buku ke halaman detail
+            router.push({ pathname: "/book/[id]", params: { id: book.id } }),
+          ),
+        )
+      )}
     </ScrollView>
   );
 }
