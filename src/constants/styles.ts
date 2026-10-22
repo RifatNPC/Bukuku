@@ -7,8 +7,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#f1f5f9",
   },
   content: {
-    padding: 20,
-    paddingTop: 56,
+    padding: 20, // paddingTop 56 dihapus karena sekarang sudah ada header Stack
   },
   header: {
     flexDirection: "row",
@@ -104,5 +103,75 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 8,
+  },
+
+  // ===== Tambahan Modul 2 =====
+  emptyText: {
+    fontSize: 14,
+    color: "#64748b",
+    marginBottom: 12,
+  },
+  errorText: {
+    fontSize: 13,
+    color: "#dc2626",
+    marginBottom: 12,
+  },
+  detailCover: {
+    width: 160,
+    height: 230,
+    borderRadius: 12,
+    alignSelf: "center",
+    backgroundColor: "#e2e8f0",
+    marginBottom: 16,
+  },
+  detailTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#0f172a",
+    textAlign: "center",
+  },
+  detailAuthor: {
+    fontSize: 15,
+    color: "#64748b",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  statusRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 20,
+  },
+  statusButton: {
+    borderWidth: 2,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  statusButtonText: {
+    fontSize: 13,
+    fontWeight: "bold",
+  },
+  deleteButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#dc2626",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  backButton: {
+    alignItems: "center",
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#64748b",
+  },
+  backButtonText: {
+    color: "#64748b",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
